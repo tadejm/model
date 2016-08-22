@@ -556,14 +556,17 @@ module Hanami
 
           protected
           def method_missing(m, *args, &blk)
-            if @context.respond_to?(m)
-              apply @context.public_send(m, *args, &blk)
+            if @collection.repository.new.respond_to?(m)
+              apply @collection.repository.new.public_send(m, *args, &blk)
             else
               super
             end
           end
 
           private
+          def apply(query)
+            dup.tap { |result| result.conditions.push(*query.conditions) }
+          end
           # Apply all the conditions and returns a filtered collection.
           #
           # This operation is idempotent, but the records are actually fetched

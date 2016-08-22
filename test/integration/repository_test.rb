@@ -428,12 +428,12 @@ describe Hanami::Repository do
           actual.all.must_equal [@article1, @article2]
         end
 
-        if adapter_name == :sql
-          it 'combines queries' do
-            actual = ArticleRepository.new.rank_by_user(@user1)
-            actual.all.must_equal [@article2, @article1]
-          end
+        it 'combines queries' do
+          actual = ArticleRepository.new.rank_by_user(@user1)
+          actual.all.must_equal [@article2, @article1]
+        end
 
+        if adapter_name == :sql
           it 'negates a query' do
             actual = ArticleRepository.new.not_by_user(@user1)
             actual.all.must_equal []
